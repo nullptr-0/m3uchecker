@@ -1,9 +1,7 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <algorithm>
-
 #ifdef _WIN32
+// make MS happy
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include <codecvt>
 #include <windows.h>
 #include <io.h>
@@ -20,9 +18,14 @@
 }(pathname, mode)
 #endif
 
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+
 std::string DirNameOf(const std::string& fname) {
     size_t pos = fname.find_last_of("\\/");
-    return ((std::string::npos == pos) ? "" : fname.substr(0, pos)) + 
+    return ((std::string::npos == pos) ? "" : fname.substr(0, pos)) +
 #ifdef _WIN32
         "\\"
 #else
@@ -38,6 +41,10 @@ int SetWorkingDirectory(const char* path) {
 
 #ifdef _WIN32
     // Windows specific code
+#ifdef SetCurrentDirectory
+#undef SetCurrentDirectory
+#define SetCurrentDirectory SetCurrentDirectoryA
+#endif // SetCurrentDirectory
     if (SetCurrentDirectory(path) == 0) {
         return -1; // Error setting the directory
     }
