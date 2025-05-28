@@ -1,4 +1,4 @@
-# m3uchecker
+# m3ucheck
 a simple m3u checker
 
 ## Build and Use
